@@ -1,41 +1,29 @@
 from scipy import integrate
 
-from math import sqrt
+import math
 
-eps = 0.0001
+eps = 0.001
 
-n = 20
+def int1(x):
 
-def Int1(x):
+    return 1/math.sqrt(x+2.5)
 
-    return 1/sqrt((x**2)+4)
+def trapezium_method(int1,a,b,n):
 
-def F_Simpson(a,b,n):
+    h=(b-a)/n
 
-    h = (b - a) / n
-
-    integr = Int1(a) + Int1(b)
+    sum=0.5*(int1(a)+int1(b))
 
     for i in range(1,n):
 
-        k = a + i*h
+        sum+=int1(a+i*h)
 
-        if i%2 == 0:
+    return sum*h
 
-            integr += 2 * Int1(k)
+v,err = integrate.quad(int1,1.6,2.2)    
 
-    else:
+if abs (trapezium_method(int1, 1.6, 2.2, 2*10) -trapezium_method(int1, 1.6, 2.2, 10))/3. <= eps:
 
-        integr += 4 * Int1(k)
+    print("Trapetzia method:",round (trapezium_method(int1,1.6,2.2,10), 5))
 
-    integr *= h/3
-
-    return integr
-
-if abs(F_Simpson(0.8,1.8,2*8) -F_Simpson(0.8,1.8,8))/ 15. <= eps:
-
-    print("F_Simpsone:",round (F_Simpson(0.8,1.8,8), 5))
-
-v,err = integrate.quad(Int1,0.8,1.8)
-
-print("Check for the F_Simpsone method= ",round(v, 5))
+print("Check for the trapetzia method= ",round(v, 5))
